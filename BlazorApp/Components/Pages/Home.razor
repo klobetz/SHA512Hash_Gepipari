@@ -1,0 +1,38 @@
+﻿@page "/"
+@using System.Text
+@using System.Security.Cryptography
+@rendermode InteractiveServer
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hash</h1>
+
+<input @bind="passInput" placeholder="Enter Password"/>
+<button class="btn btn-primary" @onclick="GetHashPassword">Get Hash</button>
+
+<div class="mt-5">
+    Generate Hash Password:
+    <p>@passHash</p>
+</div>
+
+@errorMessage
+
+@code{
+    private string passInput = string.Empty;
+    private string passHash = string.Empty;
+    private string errorMessage = string.Empty;
+
+    private void GetHashPassword()
+    {
+        if (!string.IsNullOrWhiteSpace(passInput))
+        {
+            passHash = BitConverter.ToString(SHA512.HashData(Encoding.UTF8.GetBytes(passInput))).Replace("-", "");
+            passInput = string.Empty;
+        }
+        else
+        {
+            errorMessage = "Not empthy the input box";            
+        }
+    }
+}
+
